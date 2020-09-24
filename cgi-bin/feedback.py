@@ -3,8 +3,53 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 # CSVファイルの読込
-log = pd.read_csv("data/mukai-log.csv", sep=",")
+log = pd.read_csv("data/kodera-log.csv", sep=",")
+#log = pd.read_csv("data/imai-log.csv", sep=",")
 pd.set_option("display.max_rows", None)
+
+# 視線データと速度データの抽出
+def getData(start_x, end_x):
+    place = log[(log.x >= start_x) &(log.x <= end_x)]
+    eye_data = place.loc[:, ["focus_x", "focus_y"]]
+    speed_data = place.loc[:, ["x", "speed"]]
+    return (eye_data, speed_data)
+
+# 視線データのグラフ化
+def makeEyeGraph(eye_data, file_name):
+    plt.figure()
+    eye_data.plot.scatter(x="focus_x", y="focus_y")
+    plt.title(file_name)
+    plt.savefig("fig/" + file_name)
+    plt.close("all")
+
+# 速度データのグラフ化
+def makeSpeedGraph(speed_data, file_name):
+    plt.figure()
+    speed_data.plot(x="x", y="speed")
+    plt.title(file_name)
+    plt.savefig("fig/" + file_name)
+    plt.close("all")
+
+# 統計量の表示
+def showStat(eye_data, speed_data):
+    print("<div>")
+    print("<h4>視線 統計量</h4>")
+    print(f"<p>平均 X:{round(eye_data.mean()[0], 2)} Y:{round(eye_data.mean()[1], 2)}")
+    print(f"<p>標準偏差 X:{round(eye_data.std()[0], 2)} Y:{round(eye_data.std()[1], 2)}")
+    print("<h4>速度 統計量</h4>")
+    print(f"<p>平均 {speed_data.mean()[1]}")
+    print(f"<p>標準偏差 {speed_data.std()[1]}")
+    print("</div>")
+
+# グラフの描画
+def plotGraph(file_name1, file_name2):
+    print("<div>")
+    print("<table>")
+    print("<tr>")
+    print(f"<td><img src='../fig/{file_name1}'></td>")
+    print(f"<td><img src='../fig/{file_name2}'></td>")
+    print("</tr>")
+    print("</table>")
 
 print ("Content-type:text/html\n\n")
 print("<!DOCTYPE html>")
@@ -18,65 +63,24 @@ print("</head>")
 print("<body>")
 print("<h1>運転結果</h1>");
 
-# place_Aスピードのデータ分析
-place_A = log[(log.x >=6907) &(log.x <=7021)]
-speed_A = place_A.loc[:, ["speed"]]
-a= speed_A.mean() #speed平均値
-print(a)
-print("<br>")
+# 第１交差点
+print("<h2>第１交差点</h2>")
+eye_data, speed_data = getData(6907, 7021)
+makeEyeGraph(eye_data, "eye-1.png")
+makeSpeedGraph(speed_data, "speed-1.png")
+showStat(eye_data, speed_data)
+plotGraph("eye-1.png", "speed-1.png")
 
-#place_A視線平均
-e_A = place_A.loc[:, ["focus"]]
-print(e_A.mean())
+# 第２交差点
+print("<h2>第２交差点</h2>")
+eye_data, speed_data = getData(7071, 7250)
+makeEyeGraph(eye_data, "eye-2.png")
+makeSpeedGraph(speed_data, "speed-2.png")
+showStat(eye_data, speed_data)
+plotGraph("eye-2.png", "speed-2.png")
 
-# place_Aの視線データの抽出
-eye_A = place_A.loc[:, ["focus_x", "focus_y"]]
-plt.figure()
-eye_A.plot.scatter(x="focus_x", y="focus_y")
-plt.title('eyeA')
-plt.savefig("fig/graph_A.png")
-plt.close("all")
-
-# plase_Aのスピードデータ抽出
-spe_A = place_A.loc[:, ["x", "speed"]]
-plt.figure()
-spe_A.plot(x="x", y="speed")
-plt.title('speedA')
-plt.savefig("fig/graph_A1.png")
-plt.close("all")
-
-
-# place_Bの視線データの抽出
-place_B = log[(log.x >= 7071) & (log.x <= 7250)]
-eye_B = place_B.loc[:, ["focus_x", "focus_y"]]
-plt.figure()
-eye_B.plot.scatter(x="focus_x", y="focus_y")
-plt.title('eyeB')
-plt.savefig("fig/graph_B.png")
-plt.close("all")
-
-#データの出力
-print(log.to_html())
-
-
-# place_Aのグラフを出力
-print("<div style='position:relative;top:-23600px;left:1000px;'>")
-print("<h2>一つ目の交差点</h2>")
-print("<table>")
-print("<tr>")
-print("<td><img src=" + "'../fig/graph_A.png'" + " ></td>")
-print("<td><img src=" + "'../fig/graph_A1.png'" + " ></td>")
-print("</tr>")
-print("</table>")
-
-# place_Bのグラフを出力
-print("<table>")
-print("<h2>二つ目の交差点</h2>")
-print("<tr>")
-print("<td><img src=" + "'../fig/graph_B.png'" + " width='700' height='500' ></td>")
-print("</tr>")
-print("</table>")
-print("</div>")
+# 全データの表示
+# print(log.to_html())
 
 print("</body>")
 print("</html>")
