@@ -165,7 +165,7 @@ def showStat3(eye_data, speed_data):
     print("<h4>評価 コメント</h4>")
     if eye_max[0] >= 1420 and eye_min[0] <= 500 :   #左右を確認した
         eye2 = 8
-        print("よくできていました。")
+        print("左右確認はできていました。")
     elif eye_max[0] >= 1420 and eye_min[0] <= 500 : #左右どちらかを確認した
         eye2 = 5
         print("もう少し左右を確認しましょう。")
