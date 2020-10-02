@@ -16,7 +16,7 @@ SCREEN_HEIGHT = 1080
 score_eye = 0
 score_speed = 0
 
-# 閾値    
+# 閾値
 threshold_eye = 500
 threshold_speed = 20
 
@@ -54,7 +54,7 @@ def makeEyeGraph(eye_data, file_name):
     center = eye_data.mean()
     plt.scatter(x=center[0], y=center[1], color="red", label="average", s=40)
     plt.legend()
-    
+
     plt.xlabel("X[px]")
     plt.ylabel("Y[px]")
     plt.title("Eye Moving")
@@ -72,7 +72,7 @@ def makeSpeedGraph(speed_data, file_name):
     y = np.full(x.size, speed_data.mean()[1])
     plt.plot(x, y, label="average")
     plt.legend()
-    
+
     plt.xlabel("Distance[km]")
     plt.ylabel("Speed[km/h]")
     plt.title("Speed")
@@ -81,7 +81,7 @@ def makeSpeedGraph(speed_data, file_name):
 
 # 視線の評価
 def showEyeStat(eye_data):
-    
+
     # 統計量の取得
     eye_mean = eye_data.mean()
     eye_std = eye_data.std()
@@ -100,9 +100,9 @@ def showEyeStat(eye_data):
 
     # 視線移動のスコア
     score = 0
-    
+
     # 評価コメント
-    print("<h4>評価コメント</h4>")
+    print("<h4>Comment</h4>")
     if eye_max[0] >= SCREEN_WIDTH - threshold_eye and eye_min[0] <= threshold_eye:
         #左右両方を確認
         score = 8
@@ -114,14 +114,14 @@ def showEyeStat(eye_data):
     elif eye_min[0] <= threshold_eye:
         #左だけ確認
         score = 5
-        print("<p>You looked the left side only.</p>")        
+        print("<p>You looked the left side only.</p>")
     else:
-        #左右確認なし        
+        #左右確認なし
         score = 0
         print("<p>You never looked any side.</p>")
 
     print("</div>")
-        
+
     return score
 
 # 速度の評価
@@ -142,12 +142,12 @@ def showSpeedStat(speed_data):
     print(f"<tr><th>Maximum<th> <td>{round(speed_max, 2)}[km/h]</td></tr>")
     print(f"<tr><th>Minimum<th> <td>{round(speed_min, 2)}[km/h]</td></tr>")
     print("</table>")
-    
+
     # 速度のスコア
     score = 0
 
     # 評価コメント
-    print("<h4>評価コメント</h4>")
+    print("<h4>Comment</h4>")
     if speed_mean <= threshold_speed:
         score = 8
         print("<p>You correctly reduced the speed.</p>")
@@ -158,7 +158,7 @@ def showSpeedStat(speed_data):
         score = 0
         print("<p>Your speed is over the limit.</p>")
 
-    print("</div>")        
+    print("</div>")
 
     return score
 
@@ -171,7 +171,7 @@ def showStopStat(speed_data):
     speed_max = speed_data.max()[1]
     speed_min = speed_data.min()[1]
 
-    print("<div>")    
+    print("<div>")
     print("<h3>Your Speed</h3>")
     print("<table border='1' style='border-collapse: collapse'>")
     print(f"<tr><th>Average<th> <td>{round(speed_mean, 2)}[km/h]</td></tr>")
@@ -179,11 +179,11 @@ def showStopStat(speed_data):
     print(f"<tr><th>Maximum<th> <td>{round(speed_max, 2)}[km/h]</td></tr>")
     print(f"<tr><th>Minimum<th> <td>{round(speed_min, 2)}[km/h]</td></tr>")
     print("</table>")
-    
+
     # 一時停止のスコア
     score = 0
-    
-    print("<h4>評価コメント</h4>")
+
+    print("<h4>Comment</h4>")
     if speed_min == 0:
         score = 10
         print("<p>You correctly paused at the intersection.</p>")
@@ -194,7 +194,7 @@ def showStopStat(speed_data):
     print("</div>")
 
     return score
-        
+
 
 # グラフの描画
 def plotGraph(file_names):
@@ -360,4 +360,3 @@ else:
 
 print("</body>")
 print("</html>")
-
