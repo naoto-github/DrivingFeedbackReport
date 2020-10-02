@@ -2,8 +2,18 @@ import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import sys
+import argparse
+
+# 文字化けの解消
 import io
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding = 'utf-8')
+
+# 引数の処理
+parser = argparse.ArgumentParser(description="Feedback Report for Drivers")
+parser.add_argument("--log", help="ログファイル", required=True)
+args = parser.parse_args()
+
+print(args.log)
 
 # CSVファイルの読込
 #log = pd.read_csv("data/kodera-log1.csv", sep=",") # 古寺 1回目
