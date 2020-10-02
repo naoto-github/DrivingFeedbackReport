@@ -1,15 +1,14 @@
 # DriveingFeedbackReport
 
-UC-win/roadのログデータから，運転結果の振り返りレポートを生成する．
+UC-win/roadのログファイルから，運転結果の振り返りレポートを生成する．
 
 ## 使い方
 
 Pythonでウェブサーバを起動する．
+このとき，`--log`でログファイルを指定する．
 
 ```
-$python server.py
+$python server.py --log data/imai-log1.csv
 ```
 
-ブラウザでCGI（feedback.py）にアクセスする．
-
-http://127.0.0.1:8080/cgi-bin/feedback.py
+規定のブラウザでレポートが表示される．
